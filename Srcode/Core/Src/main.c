@@ -86,30 +86,54 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
-
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  uint8_t led_flag = 1;
+  enum TrafficLightState {
+      Red,
+      Yellow,
+      Green
+    };
+
+    enum TrafficLightState currentState = Red;  // Start with RED light
+    uint32_t delayTime = 0;  // Store the delay for each state
+
   while (1)
   {
-
-    /* USER CODE END WHILE */
-	  if(led_flag == 0)
-	  {
-		  HAL_GPIO_WritePin ( LED_RED_GPIO_Port , LED_RED_Pin ,GPIO_PIN_SET ) ;
-		  HAL_GPIO_WritePin ( LED_YELLOW_GPIO_Port , LED_YELLOW_Pin ,GPIO_PIN_RESET ) ;
-		  led_flag =1;
-	  }
-	  else
-	  {
-		  HAL_GPIO_WritePin ( LED_RED_GPIO_Port , LED_RED_Pin ,GPIO_PIN_RESET ) ;
-		  HAL_GPIO_WritePin ( LED_YELLOW_GPIO_Port , LED_YELLOW_Pin ,GPIO_PIN_SET ) ;
-		  led_flag =0;
-
-	  }
-	  HAL_Delay (2000) ;
+	      HAL_Delay(delayTime);
+          /* USER CODE END WHILE */
+	  	  switch(currentState){
+	  	  case Red:
+	  	  {
+	  	  HAL_GPIO_WritePin(LED_RED_GPIO_Port, LED_RED_Pin, GPIO_PIN_RESET);   // RED LED ON
+	      HAL_GPIO_WritePin(LED_YELLOW_GPIO_Port, LED_YELLOW_Pin, GPIO_PIN_SET); // YELLOW LED OFF
+	      HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, GPIO_PIN_SET);   // GREEN LED OFF (active-low)
+	      delayTime =5000;  // Wait for 5 seconds
+	      currentState=Green;
+	      break;
+	  	  }
+	  	  case Yellow:
+	  	  {
+	      // Step 2: YELLOW LED ON (2 seconds)
+	      HAL_GPIO_WritePin(LED_RED_GPIO_Port, LED_RED_Pin, GPIO_PIN_SET);  // RED LED OFF
+	      HAL_GPIO_WritePin(LED_YELLOW_GPIO_Port, LED_YELLOW_Pin, GPIO_PIN_RESET); // YELLOW LED ON
+	      HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, GPIO_PIN_SET);   // GREEN LED OFF (active-low)
+	      delayTime =2000;  // Wait for 2 seconds
+	      currentState=Red;
+	      break;
+	  	  }
+	  	  case Green:
+	  	  {
+	      // Step 3: GREEN LED ON (3 seconds)
+	      HAL_GPIO_WritePin(LED_RED_GPIO_Port, LED_RED_Pin, GPIO_PIN_SET);  // RED LED OFF
+	      HAL_GPIO_WritePin(LED_YELLOW_GPIO_Port, LED_YELLOW_Pin, GPIO_PIN_SET); // YELLOW LED OFF
+	      HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, GPIO_PIN_RESET);   // GREEN LED ON (active-low)
+	      delayTime =3000;  // Wait for 3 seconds
+	      currentState=Yellow;
+	      break;
+	  	  }
+	  	  }
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -150,6 +174,7 @@ void SystemClock_Config(void)
   }
 }
 
+
 /**
   * @brief GPIO Initialization Function
   * @param None
@@ -163,10 +188,10 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOA_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, LED_RED_Pin|LED_YELLOW_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, LED_RED_Pin|LED_YELLOW_Pin|LED_GREEN_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pins : LED_RED_Pin LED_YELLOW_Pin */
-  GPIO_InitStruct.Pin = LED_RED_Pin|LED_YELLOW_Pin;
+  /*Configure GPIO pins : LED_RED_Pin LED_YELLOW_Pin LED_GREEN_Pin */
+  GPIO_InitStruct.Pin = LED_RED_Pin|LED_YELLOW_Pin|LED_GREEN_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
