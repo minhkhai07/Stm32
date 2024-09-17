@@ -49,32 +49,40 @@
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 /* USER CODE BEGIN PFP */
-void display7SEG(int num) {
-  uint8_t segmentPattern[] = {
-    0b00111111,
-    0b00000110,
-    0b01011011,
-    0b01001111,
-    0b01100110,
-    0b01101101,
-    0b01111101,
-    0b00000111,
-    0b01111111,
-    0b01101111 };
+//void clear_leds(void){
+//	HAL_GPIO_WritePin (GPIOA , LED_RED_Pin ,GPIO_PIN_SET);
+//	HAL_GPIO_WritePin (GPIOA , LED_REDA5_Pin ,GPIO_PIN_SET );
+//	HAL_GPIO_WritePin (GPIOA , LED_REDA6_Pin ,GPIO_PIN_SET );
+//	HAL_GPIO_WritePin (GPIOA , LED_REDA7_Pin ,GPIO_PIN_SET );
+//	HAL_GPIO_WritePin (GPIOA , LED_REDA8_Pin ,GPIO_PIN_SET );
+//	HAL_GPIO_WritePin (GPIOA , LED_REDA9_Pin ,GPIO_PIN_SET );
+//	HAL_GPIO_WritePin (GPIOA , LED_REDA10_Pin ,GPIO_PIN_SET );
+//	HAL_GPIO_WritePin (GPIOA , LED_REDA11_Pin ,GPIO_PIN_SET );
+//	HAL_GPIO_WritePin (GPIOA , LED_REDA12_Pin ,GPIO_PIN_SET );
+//	HAL_GPIO_WritePin (GPIOA , LED_REDA13_Pin ,GPIO_PIN_SET );
+//	HAL_GPIO_WritePin (GPIOA , LED_REDA14_Pin ,GPIO_PIN_SET );
+//	HAL_GPIO_WritePin (GPIOA , LED_REDA15_Pin ,GPIO_PIN_SET );
+//
+//}
+void set_led(int h)
+{
+	switch(h){
+	case 1: HAL_GPIO_WritePin (GPIOA , LED_RED_Pin ,GPIO_PIN_RESET ) ; break;
+	case 2: HAL_GPIO_WritePin (GPIOA , LED_REDA5_Pin ,GPIO_PIN_RESET ) ; break;
+	case 3: HAL_GPIO_WritePin (GPIOA , LED_REDA6_Pin ,GPIO_PIN_RESET ) ; break;
+	case 4: HAL_GPIO_WritePin (GPIOA , LED_REDA7_Pin ,GPIO_PIN_RESET ) ; break;
+	case 5: HAL_GPIO_WritePin (GPIOA , LED_REDA8_Pin ,GPIO_PIN_RESET ) ; break;
+	case 6: HAL_GPIO_WritePin (GPIOA , LED_REDA9_Pin ,GPIO_PIN_RESET ) ; break;
+	case 7: HAL_GPIO_WritePin (GPIOA , LED_REDA10_Pin ,GPIO_PIN_RESET ) ; break;
+	case 8: HAL_GPIO_WritePin (GPIOA , LED_REDA11_Pin ,GPIO_PIN_RESET ) ; break;
+	case 9: HAL_GPIO_WritePin (GPIOA , LED_REDA12_Pin ,GPIO_PIN_RESET ) ; break;
+	case 10: HAL_GPIO_WritePin (GPIOA , LED_REDA13_Pin ,GPIO_PIN_RESET ) ; break;
+	case 11: HAL_GPIO_WritePin (GPIOA , LED_REDA14_Pin ,GPIO_PIN_RESET ) ; break;
+	case 12: HAL_GPIO_WritePin (GPIOA , LED_REDA15_Pin ,GPIO_PIN_RESET ) ; break;
+	default: break;
+	}
 
-  if (num < 0 || num > 9) {
-    num = 0;
-  }
-
-  uint8_t pattern = segmentPattern[num];
-  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, (pattern & 0x01) ? GPIO_PIN_RESET : GPIO_PIN_SET); //A
-    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_1, (pattern & 0x02) ? GPIO_PIN_RESET : GPIO_PIN_SET); //B
-    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_2, (pattern & 0x04) ? GPIO_PIN_RESET : GPIO_PIN_SET); //C
-    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, (pattern & 0x08) ? GPIO_PIN_RESET : GPIO_PIN_SET); // D
-    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_4, (pattern & 0x10) ? GPIO_PIN_RESET : GPIO_PIN_SET); // E
-    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_5, (pattern & 0x20) ? GPIO_PIN_RESET : GPIO_PIN_SET); // F
-    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, (pattern & 0x40) ? GPIO_PIN_RESET : GPIO_PIN_SET); //G
-  }
+}
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -115,14 +123,20 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  int sth=1;
   while (1)
   {
+	// clear_leds();
+	set_led(sth);
+	HAL_Delay(1000);
+	sth++;
+	if(sth>12)
+	{
+		sth=1;
+	}
+
     /* USER CODE END WHILE */
-	  for(int i=9; i>=0; i--)
-	  {
-		  display7SEG(i);          // Display the number on the 7-segment
-		  HAL_Delay(1000);         // Wait for 1 second
-	  }
+
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -176,10 +190,16 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOA_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, LED_RED_Pin|LED_YELLOW_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, LED_RED_Pin|LED_REDA5_Pin|LED_REDA6_Pin|LED_REDA7_Pin
+                          |LED_REDA8_Pin|LED_REDA9_Pin|LED_REDA10_Pin|LED_REDA11_Pin
+                          |LED_REDA12_Pin|LED_REDA13_Pin|LED_REDA14_Pin|LED_REDA15_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pins : LED_RED_Pin LED_YELLOW_Pin */
-  GPIO_InitStruct.Pin = LED_RED_Pin|LED_YELLOW_Pin;
+  /*Configure GPIO pins : LED_RED_Pin LED_REDA5_Pin LED_REDA6_Pin LED_REDA7_Pin
+                           LED_REDA8_Pin LED_REDA9_Pin LED_REDA10_Pin LED_REDA11_Pin
+                           LED_REDA12_Pin LED_REDA13_Pin LED_REDA14_Pin LED_REDA15_Pin */
+  GPIO_InitStruct.Pin = LED_RED_Pin|LED_REDA5_Pin|LED_REDA6_Pin|LED_REDA7_Pin
+                          |LED_REDA8_Pin|LED_REDA9_Pin|LED_REDA10_Pin|LED_REDA11_Pin
+                          |LED_REDA12_Pin|LED_REDA13_Pin|LED_REDA14_Pin|LED_REDA15_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
