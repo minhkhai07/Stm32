@@ -118,10 +118,11 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-	  for (int i = 0; i < 10; i++) {
-	        display7SEG(i);
-	        HAL_Delay(1000); // Display each number for 1 second
-	      }
+	  for(int i=9; i>=0; i--)
+	  {
+		  display7SEG(i);          // Display the number on the 7-segment
+		  HAL_Delay(1000);         // Wait for 1 second
+	  }
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -172,20 +173,17 @@ static void MX_GPIO_Init(void)
   GPIO_InitTypeDef GPIO_InitStruct = {0};
 
   /* GPIO Ports Clock Enable */
-  __HAL_RCC_GPIOB_CLK_ENABLE();
+  __HAL_RCC_GPIOA_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, LED_RED_Pin|LED_REDB1_Pin|LED_REDB2_Pin|LED_REDB3_Pin
-                          |LED_REDB4_Pin|LED_REDB5_Pin|LED_REDB6_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, LED_RED_Pin|LED_YELLOW_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pins : LED_RED_Pin LED_REDB1_Pin LED_REDB2_Pin LED_REDB3_Pin
-                           LED_REDB4_Pin LED_REDB5_Pin LED_REDB6_Pin */
-  GPIO_InitStruct.Pin = LED_RED_Pin|LED_REDB1_Pin|LED_REDB2_Pin|LED_REDB3_Pin
-                          |LED_REDB4_Pin|LED_REDB5_Pin|LED_REDB6_Pin;
+  /*Configure GPIO pins : LED_RED_Pin LED_YELLOW_Pin */
+  GPIO_InitStruct.Pin = LED_RED_Pin|LED_YELLOW_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
 }
 
