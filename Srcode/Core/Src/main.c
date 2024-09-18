@@ -117,6 +117,7 @@ void updateClockDisplay(int hour, int minute, int second) {
     // Tắt tất cả các đèn LED trước khi bật các đèn mới
     clear_clock();
 
+
     // Bật đèn LED cho giờ
     setNumberOnClock(hour % 12);   // Giờ trên đồng hồ 12 giờ
 
