@@ -94,22 +94,22 @@ int main(void)
   uint8_t led_flag = 1;
   while (1)
   {
+	  if(led_flag == 0)
+	  	  {
+	  		  HAL_GPIO_WritePin ( LED_RED_GPIO_Port , LED_RED_Pin ,GPIO_PIN_SET ) ;
+	  		  HAL_GPIO_WritePin ( LED_YELLOW_GPIO_Port , LED_YELLOW_Pin ,GPIO_PIN_RESET ) ;
+	  		  led_flag =1;
+	  	  }
+	  	  else
+	  	  {
+	  		  HAL_GPIO_WritePin ( LED_RED_GPIO_Port , LED_RED_Pin ,GPIO_PIN_RESET ) ;
+	  		  HAL_GPIO_WritePin ( LED_YELLOW_GPIO_Port , LED_YELLOW_Pin ,GPIO_PIN_SET ) ;
+	  		  led_flag =0;
+	  	  }
+	  	  HAL_Delay (2000) ;
 
     /* USER CODE END WHILE */
-	  if(led_flag == 0)
-	  {
-		  HAL_GPIO_WritePin ( LED_RED_GPIO_Port , LED_RED_Pin ,GPIO_PIN_SET ) ;
-		  HAL_GPIO_WritePin ( LED_YELLOW_GPIO_Port , LED_YELLOW_Pin ,GPIO_PIN_RESET ) ;
-		  led_flag =1;
-	  }
-	  else
-	  {
-		  HAL_GPIO_WritePin ( LED_RED_GPIO_Port , LED_RED_Pin ,GPIO_PIN_RESET ) ;
-		  HAL_GPIO_WritePin ( LED_YELLOW_GPIO_Port , LED_YELLOW_Pin ,GPIO_PIN_SET ) ;
-		  led_flag =0;
 
-	  }
-	  HAL_Delay (2000) ;
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
